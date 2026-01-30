@@ -470,8 +470,17 @@ class ExpenseTracker {
     
     // Initialize charts
     initializeCharts() {
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        // Add null checks to prevent errors
+        const categoryCanvas = document.getElementById('categoryChart');
+        const monthlyCanvas = document.getElementById('monthlyChart');
+        
+        if (!categoryCanvas || !monthlyCanvas) {
+            console.warn('Chart canvases not found, skipping chart initialization');
+            return;
+        }
+        
+        const categoryCtx = categoryCanvas.getContext('2d');
+        const monthlyCtx = monthlyCanvas.getContext('2d');
         
         // Category Chart (Pie Chart)
         this.categoryChart = new Chart(categoryCtx, {
@@ -529,6 +538,12 @@ class ExpenseTracker {
     
     // Update charts with current data
     updateCharts() {
+        // Add null checks to prevent errors
+        if (!this.categoryChart || !this.monthlyChart) {
+            console.warn('Charts not initialized, skipping update');
+            return;
+        }
+        
         const expenses = this.db.getFilteredExpenses(this.currentFilters);
         
         // Update Category Chart
